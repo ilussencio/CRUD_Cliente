@@ -11,7 +11,7 @@ pipeline {
         
         stage('[DOCKER] Build') {
             steps {
-                sh "docker build -t ilussencio/crud_cliente:$BUILD_NUMBER ./eureka-server"
+                sh "docker build -t ilussencio/crud_cliente:$BUILD_NUMBER ."
             }
         }
         stage('Deploy') {
