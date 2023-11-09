@@ -1,6 +1,7 @@
 pipeline {
     agent any
     environment {
+        registryCredential = 'dockerhub_id'
         TAG = "${DATE}.${BUILD_NUMBER}"
     }
     stages {
@@ -24,7 +25,7 @@ pipeline {
             steps {
                 script {
                     docker.build("ilussencio/crud_cliente:${TAG}")
-                    docker.withRegistry('https://registry.hub.docker.com', 'docker_credential') {
+                    docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
                         docker.image("ilussencio/crud_cliente:${TAG}").push()
                         docker.image("ilussencio/crud_cliente:${TAG}").push("latest")
                     }
