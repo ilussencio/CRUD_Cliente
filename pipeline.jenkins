@@ -19,6 +19,18 @@ pipeline {
                 }
             }
         }
+
+        stage('[DOCKER] Push DockerHub') {
+            steps {
+                script {
+                    docker.build("ilussencio/crud_cliente:${TAG}")
+                    docker.withRegistry('https://registry.hub.docker.com', 'docker_credential') {
+                        docker.image("ilussencio/crud_cliente:${TAG}").push()
+                        docker.image("ilussencio/crud_cliente:${TAG}").push("latest")
+                    }
+                }
+            }
+        }
         
     }
 }
