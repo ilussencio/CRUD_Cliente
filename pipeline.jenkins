@@ -11,12 +11,17 @@ pipeline {
         
         stage('[DOCKER] Build') {
             steps {
-                sh "docker build -t ilussencio/crud_cliente:$BUILD_NUMBER ."
+                script {dockerImage = docker.build ilussencio/crud_client}
             }
         }
-        stage('Deploy') {
+        stage('[DOCKER] Push') {
             steps {
-                // Deploy your microservice to the desired environment
+                script {
+                    docker.withRegistry( '', registryCredential ) {
+                            dockerImage.push("$BUILD_NUMBER")
+                         dockerImage.push('latest')
+                      }
+                }
                 echo 'Deploy'
             }
         }
