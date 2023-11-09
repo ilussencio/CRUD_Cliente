@@ -1,7 +1,10 @@
 pipeline {
     agent any
+    environment {
+        TAG = "${DATE}.${BUILD_NUMBER}"
+    }
     stages {
-        stage('[MAVEN] Clean Package') {
+        stage('[MAVEN] Build') {
             steps {
                 withMaven() {
                     sh 'mvn clean package'
@@ -11,19 +14,11 @@ pipeline {
         
         stage('[DOCKER] Build') {
             steps {
-                script {dockerImage = docker.build ilussencio/crud_client}
-            }
-        }
-        stage('[DOCKER] Push') {
-            steps {
                 script {
-                    docker.withRegistry( '', registryCredential ) {
-                            dockerImage.push("$BUILD_NUMBER")
-                         dockerImage.push('latest')
-                      }
+                    docker.build("ilussencio/crud_cliente:${TAG}")
                 }
-                echo 'Deploy'
             }
         }
+        
     }
 }
