@@ -1,0 +1,24 @@
+pipeline {
+    agent any
+    stages {
+        stage('[MAVEN] Clean Package') {
+            steps {
+                withMaven() {
+                    sh 'mvn clean package'
+                }
+            }
+        }
+        
+        stage('[DOCKER] Build') {
+            steps {
+                sh "docker build -t ilussencio/crud_cliente:$BUILD_NUMBER ./eureka-server"
+            }
+        }
+        stage('Deploy') {
+            steps {
+                // Deploy your microservice to the desired environment
+                echo 'Deploy'
+            }
+        }
+    }
+}
