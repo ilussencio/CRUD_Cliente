@@ -3,6 +3,7 @@ pipeline {
     environment {
         registryCredential = 'docker_credential'
         dockerImage = ''
+        dockerRepository = 'ilussencio/crud_cliente'
     }
     stages {
         stage('[MAVEN] Build') {
@@ -16,7 +17,7 @@ pipeline {
         stage('[DOCKER] Build') {
             steps {
                 script {
-                    docker.build("ilussencio/crud_cliente:${BUILD_NUMBER}")
+                    docker.build('${dockerRepository}:${BUILD_NUMBER}')
                 }
             }
         }
@@ -24,9 +25,10 @@ pipeline {
         stage('[DOCKER] Push DockerHub') {
             steps {
                 script {
-                    dockerImage = docker.build("ilussencio/crud_cliente:${BUILD_NUMBER}")
+                    dockerImage = docker.build('${dockerRepository}:${BUILD_NUMBER}')
                     docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
                         dockerImage.push()
+                        dockerImage.push('latest')
                     }
                 }
             }
