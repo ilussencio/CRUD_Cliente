@@ -15,7 +15,7 @@ pipeline {
         stage('[DOCKER] Build Push DockerHub') {
             steps {
                 script {
-                    dockerImage = docker.build('ilussencio/crud_cliente:${BUILD_NUMBER}')
+                    dockerImage = docker.build('ilussencio/crud_cliente:$BUILD_NUMBER')
                     docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
                         dockerImage.push()
                         dockerImage.push('latest')
