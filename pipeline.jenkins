@@ -2,7 +2,6 @@ pipeline {
     agent any
     environment {
         registryCredential = 'dockerhub_id'
-        TAG = "${DATE}.${BUILD_NUMBER}"
     }
     stages {
         stage('[MAVEN] Build') {
@@ -16,7 +15,7 @@ pipeline {
         stage('[DOCKER] Build') {
             steps {
                 script {
-                    docker.build("ilussencio/crud_cliente:${TAG}")
+                    docker.build("ilussencio/crud_cliente:${BUILD_NUMBER}")
                 }
             }
         }
@@ -24,10 +23,10 @@ pipeline {
         stage('[DOCKER] Push DockerHub') {
             steps {
                 script {
-                    docker.build("ilussencio/crud_cliente:${TAG}")
+                    docker.build('ilussencio/crud_cliente:${BUILD_NUMBER}')
                     docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
-                        docker.image("ilussencio/crud_cliente:${TAG}").push()
-                        docker.image("ilussencio/crud_cliente:${TAG}").push("latest")
+                        docker.image('ilussencio/crud_cliente:${BUILD_NUMBER}').push()
+                        docker.image('ilussencio/crud_cliente:${BUILD_NUMBER}').push('latest')
                     }
                 }
             }
