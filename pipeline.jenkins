@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        registryCredential = 'dockerhub_id'
+        registryCredential = 'docker_credential'
     }
     stages {
         stage('[MAVEN] Build') {
